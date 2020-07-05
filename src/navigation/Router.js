@@ -7,35 +7,36 @@ import { setTopLevelNavigator } from "../services";
 import { connect } from 'react-redux';
 import GetStarted from '../screens/GetStarted';
 import SignUp from '../screens/SignUp';
+import Drawer from './Drawer';
 
 const Stack = createStackNavigator();
 
 const AuthStack = () => (
     <Stack.Navigator >
         <Stack.Screen name="GetStarted" component={GetStarted} options={{ header: () => null }} />
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Login} options={{ headerTitle: "ShopCart", headerLeft: null }} />
         <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
 );
 
 const HomeStack = () => (
     <Stack.Navigator>
-        <Stack.Screen name="home" component={Home} />
+        <Stack.Screen name="home" component={Drawer} />
     </Stack.Navigator>
 );
 
 const Router = ({ isLoggedIn }) => {
     const initialRouteName = isLoggedIn ? 'home' : 'auth';
     return (
-        // <NavigationContainer ref={ref => setTopLevelNavigator(ref)}>
-        <Stack.Navigator
-            initialRouteName={initialRouteName}
-            headerMode={'none'}
-        >
-            <Stack.Screen name="home" component={HomeStack} />
-            <Stack.Screen name="auth" component={AuthStack} />
-        </Stack.Navigator>
-        // </NavigationContainer>
+        <NavigationContainer ref={ref => setTopLevelNavigator(ref)}>
+            <Stack.Navigator
+                initialRouteName={initialRouteName}
+                headerMode={'none'}
+            >
+                <Stack.Screen name="home" component={HomeStack} />
+                <Stack.Screen name="auth" component={AuthStack} />
+            </Stack.Navigator>
+        </NavigationContainer>
     )
 }
 

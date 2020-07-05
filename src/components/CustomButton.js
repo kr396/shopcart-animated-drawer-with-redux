@@ -3,10 +3,10 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { colors, constants, fonts } from '../config';
 
 export const CustomButton = ({ onPress, label, isRoundButton = true, style }) => {
-    const borderRadius = isRoundButton ? 10 : 0;
+    const borderRadius = isRoundButton ? 25 : 0;
     return (
         <TouchableOpacity
-            style={[styles.button, { borderRadius }]}
+            style={[styles.button, { borderRadius }, style]}
             activeOpacity={0.8}
             onPress={onPress}
         >

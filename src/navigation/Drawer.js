@@ -6,20 +6,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
   DrawerItem,
   createDrawerNavigator,
-  DrawerContentScrollView,
-
 } from '@react-navigation/drawer';
 import Animated from 'react-native-reanimated';
-// import { Feather, AntDesign } from '@expo/vector-icons';
-// import { Block, Button, Text } from 'expo-ui-kit';
-// import { LinearGradient } from 'expo-linear-gradient';
 
 // screens
 import Dashboard from '../screens/Dashboard';
 import ProductsList from '../screens/ProductsList';
-import Messages from '../screens/Messages';
-import Contact from '../screens/Contact';
+
 import { colors } from '../config';
+import { logOut } from '../redux/operations/operations';
+import { connect } from 'react-redux';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -79,7 +75,7 @@ const drawerRoutes = [
     label: 'Sign Out',
     routName: "ProductsList",
   },
-]
+];
 
 const Screens = ({ navigation, style }) => {
   return (
@@ -89,51 +85,15 @@ const Screens = ({ navigation, style }) => {
           headerTransparent: true,
           headerTitle: null,
           headerLeft: () => (
-            <Button title={"toggle"} onPress={() => navigation.openDrawer()}>
-              {/* <Feather name="menu" size={18} color="black" style={{ paddingHorizontal: 10 }} /> */}
-            </Button>
+            <Button title={"toggle"} onPress={() => navigation.openDrawer()} />
           ),
         }}>
-        <Stack.Screen name="Home">{props => <Dashboard {...props} />}</Stack.Screen>
-        <Stack.Screen name="Messages">{props => <Messages {...props} />}</Stack.Screen>
-        <Stack.Screen name="Contact">{props => <Contact {...props} />}</Stack.Screen>
         <Stack.Screen name="ProductsList">{props => <ProductsList {...props} />}</Stack.Screen>
       </Stack.Navigator>
     </Animated.View>
   );
 };
 
-function renderDrawerSection(section, props) {
-  console.log("Section", section);
-  const onPress = section.data.length > 0 ? {} : props.navigation.navigate(section.routName)
-  return (
-    <TouchableOpacity
-      onPress={() => onPress}
-      style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
-    >
-      <DrawerItem
-        label={section.label}
-        labelStyle={styles.drawerLabel}
-        style={styles.drawerItem}
-
-      // onPress={() => onPress}
-      // icon={() => <AntDesign name="dashboard" color="white" size={16} />}
-      />
-      <Text style={styles.drawerLabel}>+</Text>
-    </TouchableOpacity>
-  )
-}
-function renderDrawerItem(item, props) {
-  return (
-    <DrawerItem
-      label={item.label}
-      labelStyle={styles.drawerLabel}
-      style={styles.drawerItem}
-      onPress={() => props.navigation.navigate(item.routName)}
-    // icon={() => <AntDesign name="dashboard" color="white" size={16} />}
-    />
-  )
-}
 
 function renderSeparatorComponent() {
   return (<View style={styles.separator} />)
@@ -146,20 +106,19 @@ const DrawerContent = props => {
     <FlatList
       data={drawerRoutes}
       keyExtractor={(item, index) => item.label}
-      // renderItem={({ item }) => renderDrawerItem(item, props)}
-      // renderSectionHeader={({ section }) => renderDrawerSection(section, props)}
       renderItem={({ item }) => {
         return (
           <>
-            <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={styles.drawerItemWrap}>
               <DrawerItem
                 label={item.label}
                 labelStyle={styles.drawerLabel}
-                // style={styles.drawerItem}
+                style={styles.drawerItem}
                 activeBackgroundColor={colors.royalBlue}
                 onPress={() => {
                   setselectedLabel(item.label)
-                  if (item.routName) props.navigation.navigate(item.routName)
+                  if (item.label == 'Sign Out') props.logOut();
+                  if (item.routName) props.navigation.navigate(item.routName);
                 }}
 
               />
@@ -198,62 +157,11 @@ const DrawerContent = props => {
       getItemLayout={(data, index) => (
         { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
       )}
-    // renderSectionHeader={({ section }) => {
-    //   const onPress = section.data.length > 0 ? {} : props.navigation.navigate(section.routName)
-    //   return (
-    //     <TouchableOpacity
-    //       onPress={() => onPress}
-    //       style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
-    //     >
-    //       <DrawerItem
-    //         label={section.label}
-    //         labelStyle={styles.drawerLabel}
-    //         style={styles.drawerItem}
-    //       />
-    //       <Text style={styles.drawerLabel}>+</Text>
-    //     </TouchableOpacity>
-    //   )
-    // }}
-    ></FlatList>
-    // <DrawerContentScrollView {...props} scrollEnabled={false} contentContainerStyle={{ flex: 1 }}>
-
-    //   {/* <View>
-    //     <DrawerItem
-    //       label="Dashboard"
-    //       labelStyle={styles.drawerLabel}
-    //       style={styles.drawerItem}
-    //       onPress={() => props.navigation.navigate('Home')}
-    //     // icon={() => <AntDesign name="dashboard" color="white" size={16} />}
-    //     />
-    //     <DrawerItem
-    //       label="Messages"
-    //       labelStyle={{ color: 'white', marginLeft: -16 }}
-    //       style={{ alignItems: 'flex-start', marginVertical: 0 }}
-    //       onPress={() => props.navigation.navigate('Messages')}
-    //     // icon={() => <AntDesign name="message1" color="white" size={16} />}
-    //     />
-    //     <DrawerItem
-    //       label="Contact us"
-    //       labelStyle={{ color: 'white', marginLeft: -16 }}
-    //       style={{ alignItems: 'flex-start', marginVertical: 0 }}
-    //       onPress={() => props.navigation.navigate('Contact')}
-    //     // icon={() => <AntDesign name="phone" color="white" size={16} />}
-    //     />
-    //   </View>
-
-    //   <View >
-    //     <DrawerItem
-    //       label="Logout"
-    //       labelStyle={{ color: 'white' }}
-    //       // icon={() => <AntDesign name="logout" color="white" size={16} />}
-    //       onPress={() => alert('Are your sure to logout?')}
-    //     />
-    //   </View> */}
-    // </DrawerContentScrollView>
+    />
   );
 };
 
-export default () => {
+export const DrawerMenu = ({ logOut }) => {
   const [progress, setProgress] = React.useState(new Animated.Value(0));
   const scale = Animated.interpolate(progress, {
     inputRange: [0, 1],
@@ -269,7 +177,6 @@ export default () => {
   return (
     <View style={{ flex: 1 }} >
       <Drawer.Navigator
-        // hideStatusBar
         drawerType="slide"
         overlayColor="transparent"
         drawerStyle={styles.drawerStyles}
@@ -282,6 +189,7 @@ export default () => {
         sceneContainerStyle={{ backgroundColor: colors.primary }}
         drawerContent={props => {
           setProgress(props.progress);
+          props = { ...props, logOut }
           return <DrawerContent {...props} />;
         }}>
         <Drawer.Screen name="Screens">
@@ -306,11 +214,37 @@ const styles = StyleSheet.create({
     // overflow: 'scroll',
     // borderWidth: 1,
   },
-  drawerStyles: { flex: 1, width: '50%', backgroundColor: colors.primary },
-  drawerItem: { flex: 1, marginVertical: 0 },
-  drawerLabel: { color: 'white', /* marginLeft: -16 */ },
+  drawerStyles:
+  {
+    flex: 1,
+    width: '50%',
+    backgroundColor: colors.primary
+  },
+  drawerItem: {
+    flex: 1,
+    marginVertical: 0
+  },
+  drawerItemWrap: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  drawerLabel: {
+    color: 'white',
+    /* marginLeft: -16 */
+},
   separator: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: colors.white,
   }
 });
+
+const mapStateToProps = ({ requestState }) => ({
+  loading: requestState.loading,
+});
+
+const mapDispatchToProps = {
+  logOut,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerMenu);

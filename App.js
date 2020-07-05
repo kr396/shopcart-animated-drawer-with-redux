@@ -13,10 +13,9 @@ export default App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer >
-          <Drawer />
-          {/* <Router /> */}
-        </NavigationContainer>
+        {/* <NavigationContainer > */}
+        <Router />
+        {/* </NavigationContainer> */}
       </PersistGate>
     </Provider>
   );
