@@ -4,4 +4,6 @@ export const colors = {
     royalBlue: '#4169e1',
     gray: 'gray',
     silver: '#c0c0c0',
+    darkslategrey: 'darkslategrey',
+    dimgray: '#696969'
 };

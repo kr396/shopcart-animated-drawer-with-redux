@@ -7,14 +7,13 @@ export default ({ style }) => {
         <View
             // color="#88B04B"
             style={{
+                flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
                 ...style,
             }}>
             <StatusBar />
-            <Text>
-                New video comming soon
-      </Text>
+            <Text>Product List</Text>
         </View>
     );
 };

@@ -8,20 +8,15 @@ import { connect } from 'react-redux';
 import GetStarted from '../screens/GetStarted';
 import SignUp from '../screens/SignUp';
 import Drawer from './Drawer';
+import TabBar from './Tab';
 
 const Stack = createStackNavigator();
 
 const AuthStack = () => (
     <Stack.Navigator >
         <Stack.Screen name="GetStarted" component={GetStarted} options={{ header: () => null }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerTitle: "ShopCart", headerLeft: null }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerTitle: "ShopCart", headerLeft: null, headerTransparent: true }} />
         <Stack.Screen name="SignUp" component={SignUp} />
-    </Stack.Navigator>
-);
-
-const HomeStack = () => (
-    <Stack.Navigator>
-        <Stack.Screen name="home" component={Drawer} />
     </Stack.Navigator>
 );
 
@@ -33,7 +28,7 @@ const Router = ({ isLoggedIn }) => {
                 initialRouteName={initialRouteName}
                 headerMode={'none'}
             >
-                <Stack.Screen name="home" component={HomeStack} />
+                <Stack.Screen name="home" component={Drawer} />
                 <Stack.Screen name="auth" component={AuthStack} />
             </Stack.Navigator>
         </NavigationContainer>

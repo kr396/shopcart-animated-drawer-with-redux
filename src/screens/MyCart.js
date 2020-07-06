@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { CustomButton, Loader } from '../components';
-import { logOut } from '../redux/operations/operations';
+import { Loader } from '../components';
 
-class Home extends Component {
+class MyCart extends Component {
     render() {
         return (
             <>
                 <Loader animating={this.props.loading} />
                 <View style={styles.container}>
-                    {/* <CustomButton
-                        label={'Logout'}
-                        onPress={() => this.props.logOut()}
-                    /> */}
+                    <Text style={{ alignSelf: 'center' }}>{this.props.route.name}</Text>
                 </View>
             </>
         )
@@ -33,7 +29,6 @@ const mapStateToProps = ({ requestState }) => ({
 });
 
 const mapDispatchToProps = {
-    logOut,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(MyCart);

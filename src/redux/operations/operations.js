@@ -11,7 +11,7 @@ export const logIn = () => {
             dispatch(requestSuccessAction());
             dispatch(setUserDetailsAction());
             navigateAndReset('home');
-        }, 3000);
+        }, 2000);
     }
 };
 

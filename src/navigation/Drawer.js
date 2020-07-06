@@ -10,17 +10,26 @@ import {
 import Animated from 'react-native-reanimated';
 
 // screens
-import Dashboard from '../screens/Dashboard';
 import ProductsList from '../screens/ProductsList';
+import TabBar from './Tab';
 
 import { colors } from '../config';
 import { logOut } from '../redux/operations/operations';
 import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+/**
+ * Routes of Drawer
+ */
 const drawerRoutes = [
+  {
+    label: 'Home',
+    routName: "Home"
+  },
   {
     label: 'Men\'s wear',
     data: [
@@ -77,7 +86,8 @@ const drawerRoutes = [
   },
 ];
 
-const Screens = ({ navigation, style }) => {
+const Screens = (props) => {
+  const { navigation, style } = props
   return (
     <Animated.View style={StyleSheet.flatten([styles.stack, style])}>
       <Stack.Navigator
@@ -85,16 +95,24 @@ const Screens = ({ navigation, style }) => {
           headerTransparent: true,
           headerTitle: null,
           headerLeft: () => (
-            <Button title={"toggle"} onPress={() => navigation.openDrawer()} />
+            <TouchableOpacity
+              onPress={() => navigation.openDrawer()}
+              style={styles.drawerIcon}
+            >
+              <Icon name={'bars'} size={25} />
+            </TouchableOpacity>
           ),
+
         }}>
-        <Stack.Screen name="ProductsList">{props => <ProductsList {...props} />}</Stack.Screen>
+        <Stack.Screen name="Home" component={TabBar} />
       </Stack.Navigator>
     </Animated.View>
   );
 };
 
-
+/**
+ * Returns react component for seperate items
+ */
 function renderSeparatorComponent() {
   return (<View style={styles.separator} />)
 }
@@ -116,7 +134,7 @@ const DrawerContent = props => {
                 style={styles.drawerItem}
                 activeBackgroundColor={colors.royalBlue}
                 onPress={() => {
-                  setselectedLabel(item.label)
+                  if (selectedLabel === item.label) { setselectedLabel('') } else setselectedLabel(item.label);
                   if (item.label == 'Sign Out') props.logOut();
                   if (item.routName) props.navigation.navigate(item.routName);
                 }}
@@ -191,7 +209,9 @@ export const DrawerMenu = ({ logOut }) => {
           setProgress(props.progress);
           props = { ...props, logOut }
           return <DrawerContent {...props} />;
-        }}>
+        }}
+
+      >
         <Drawer.Screen name="Screens">
           {props => <Screens {...props} style={animatedStyle} />}
         </Drawer.Screen>
@@ -214,6 +234,9 @@ const styles = StyleSheet.create({
     // overflow: 'scroll',
     // borderWidth: 1,
   },
+  drawerIcon: {
+    marginHorizontal: 20
+  },
   drawerStyles:
   {
     flex: 1,
@@ -232,7 +255,7 @@ const styles = StyleSheet.create({
   drawerLabel: {
     color: 'white',
     /* marginLeft: -16 */
-},
+  },
   separator: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: colors.white,
